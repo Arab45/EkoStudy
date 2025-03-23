@@ -1,42 +1,33 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { CreateNinjaDto } from './dto/create-ninja.dto';
-import { UpdateNinjaDto } from './dto/update-ninja.dto';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { NinjaService } from './ninja.service';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { CreateNinjaDto } from './dto/create.dto';
+import { UpdateNinjaDto } from './dto/update.dto';
 
 @Controller('ninja')
 export class NinjaController {
-    constructor( private readonly ninjaService: NinjaService ){}
-    // Get ninja 
-    @Get()
-    getNinja(@Query("weapon") weapon: 'knife' | 'gun') {
-        return this.ninjaService.getNinjas(weapon);
-    }
-
-    //Findone by id
-    @Get(":id")
-    getOneNinja(@Param ("id") id: string){
-        return this.ninjaService.getNinja( +id)
-    }
-
-    //UpdateOne by id
+    constructor(private readonly ninjaService: NinjaService) { }
     @Post()
-    createOne(@Body() createNinjaDto: CreateNinjaDto ){
-        return this.ninjaService.createNinja(createNinjaDto)
+    createNinja(@Body() createDto: CreateNinjaDto) {
+        return this.ninjaService.createNinja(createDto)
     }
 
-    @Put(":id")
-    updateNinja(@Param("id") id: string, @Body() updateNinjaDto: UpdateNinjaDto){
-        return this.ninjaService.updateNinja( +id, updateNinjaDto);
+    @Get(":id")
+    singleNinja(@Param("id") id: string) {
+        return this.ninjaService.singleNinja(id)
+    }
+
+    @Get()
+    allNinja() {
+        return this.ninjaService.allNinja();
     }
 
     @Delete(":id")
-    deleteNinja(@Param("id") id: string){
-        return this.ninjaService.removeNinja( +id)
+    deleteNinja(@Param("id") id: string) {
+        return this.ninjaService.deleteNinja(id)
     }
-    //for query in nest js
-    // @Get()
-    // getQuery(@Query('type') type: string){
-    //     return [{ type }]
-    // }
+
+    @Put(":id")
+    updateNinja(@Param("id") id: string, @Body() updateDto: UpdateNinjaDto) {
+        return this.ninjaService.updateNinja(id, updateDto);
+    }
 }

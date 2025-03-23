@@ -1,67 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { CreateNinjaDto } from './dto/create-ninja.dto';
-import { UpdateNinjaDto } from './dto/update-ninja.dto';
+import { Inject, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Ninja } from 'src/schema/Ninja.schema';
+import { CreateNinjaDto } from './dto/create.dto';
+import { UpdateNinjaDto } from './dto/update.dto';
 
 @Injectable()
 export class NinjaService {
-    private ninja = [
-        {
-            id: 0,
-            name: "NinjaA",
-            weapon: "knife"
-        },
-        {
-            id: 1,
-            name: "NinjaB",
-            weapon: "gun"
-        }
-    ];
-
-    getNinjas( weapon? : "knife" | "gun"){
-        if(weapon){
-            return this.ninja.filter((ninja) => ninja.weapon === weapon)
-        }
-        return this.ninja
+    constructor(
+        @InjectModel(Ninja.name) private ninjaModel: Model<Ninja>,
+    ) { }
+   async  createNinja(createDto: CreateNinjaDto) {
+        const newUser = new this.ninjaModel(createDto)
+        return newUser.save()
     }
 
-   
-
-    getNinja(id: number){
-        const ninja = this.ninja.find((ninja) => ninja.id === id);
-
-        if(!ninja){
-            throw new Error('This data can not be find')
-        }
-
-        return ninja
+    allNinja() {
+        return this.ninjaModel.find();
     }
 
-    createNinja( createNinjaDto: CreateNinjaDto){
-        const newNinja = {
-            ...createNinjaDto,
-            id: Date.now()
-        };
-        this.ninja.push(newNinja);
-
-        return newNinja
+   async  singleNinja(id: string) {
+        return this.ninjaModel.findById(id);
     }
 
-    updateNinja( id: number, updateNinjaDto: UpdateNinjaDto ){
-        this.ninja = this.ninja.map((ninja) => {
-            if(ninja.id === id ){
-                return { ...ninja, ...updateNinjaDto }
-            }
-            return ninja
-        } )
 
-        return this.getNinja(id)
+     async updateNinja(id: string, updateDto: UpdateNinjaDto) {
+        return this.ninjaModel.findByIdAndUpdate(id, updateDto)
     }
 
-    removeNinja(id: number){
-        const toBeRemove = this.getNinja(id);
-
-        this.ninja = this.ninja.filter((ninja) => ninja.id !== id )
-
-        return toBeRemove;
+    async deleteNinja(id: string) {
+        return this.ninjaModel.findByIdAndDelete(id)
     }
 }
