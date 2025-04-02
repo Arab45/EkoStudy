@@ -10,7 +10,7 @@ export class NinjaService {
     constructor(
         @InjectModel(Ninja.name) private ninjaModel: Model<Ninja>,
     ) { }
-   async  createNinja(createDto: CreateNinjaDto) {
+  createNinja(createDto: CreateNinjaDto) {
         const newUser = new this.ninjaModel(createDto)
         return newUser.save()
     }

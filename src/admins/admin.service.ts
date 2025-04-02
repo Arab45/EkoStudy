@@ -8,14 +8,14 @@ import { UpdateAdminDto } from './dto/updateAdminDto';
 
 
 @Injectable()
-export class AdminsService {
+export class AdminService {
     constructor(
         @InjectModel(Admins.name) private adminModel: Model<Admins>
     ){}
 
     async createAdmin( createAdminDto: CreateAdminDto){
         const newAdmin = new this.adminModel(createAdminDto);
-        await newAdmin.save()
+       return  await newAdmin.save()
     }
 
     async fetchAll (){

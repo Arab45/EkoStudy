@@ -1,12 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { CreateAdminDto } from "./dto/createAdminDto";
-import { AdminsService } from "./admin.service";
+import { AdminService } from "./admin.service";
 import { UpdateAdminDto } from "./dto/updateAdminDto";
 
-@Controller("admin")
+
+@Controller('admin')
 export class AdminController{
     constructor(
-        private readonly adminSvc: AdminsService
+        private readonly adminSvc: AdminService
     ){}
     @Post()
     createAdmin(@Body() createAdminDto: CreateAdminDto){

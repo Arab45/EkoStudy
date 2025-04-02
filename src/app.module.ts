@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { NinjaModule } from './ninja/ninja.module';
 import { UsersModule } from './users/users.module';
 import { AdminsModule } from './admins/admin.module';
-// import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 @Module({
@@ -10,9 +10,9 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot(), //Load environment variable
     MongooseModule.forRoot( process.env.MONGO_URI || "mongodb://localhost:27017" ),
     NinjaModule, 
-    // UsersModule, 
+    UsersModule, 
     AdminsModule,
-    // AuthModule, 
+    AuthModule, 
   ],
 })
 export class AppModule {}

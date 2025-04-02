@@ -1,13 +1,6 @@
-// import { Body, Controller, HttpCode, HttpStatus, NotImplementedException, Post } from '@nestjs/common';
-// import { AuthService } from './auth.service';
+import { Controller } from "@nestjs/common";
 
-// @Controller('auth')
-// export class AuthController {
-//     constructor( private authSvc: AuthService){ }
+@Controller()
+export class AuthController {
 
-//     @HttpCode(HttpStatus.OK)
-//     @Post("login")
-//     login(@Body() input: { username: string, password: string}){
-//         return this.authSvc.authenticateAdmin(input)
-//     }
-// }
+}
