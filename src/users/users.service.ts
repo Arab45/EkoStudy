@@ -21,8 +21,13 @@ export class UsersService {
     return newUser.save()
   }
 
+  //user validation middleware
+  async findByEmail(email: string) {
+    return this.userModel.findOne({ email });
+  }
+
   findAll() {
-    return `This action returns all users`;
+    return this.userModel.find();
   }
 
   findOne(id: number) {
