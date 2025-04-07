@@ -6,13 +6,17 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [ 
-    ConfigModule.forRoot(), //Load environment variable
-    MongooseModule.forRoot( process.env.MONGO_URI || "mongodb://localhost:27017" ),
-    NinjaModule, 
-    UsersModule, 
+  imports: [
+    ConfigModule.forRoot(
+      {
+        isGlobal: true,
+      }
+    ), //Load environment variable
+    MongooseModule.forRoot(process.env.MONGO_URI || "mongodb://localhost:27017"),
+    NinjaModule,
+    UsersModule,
     AdminsModule,
-    AuthModule, 
+    AuthModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

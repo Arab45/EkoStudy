@@ -5,12 +5,14 @@ import * as bcrypt from "bcryptjs"
 import { Model } from 'mongoose';
 import { User } from 'src/schema/User.schema';
 import { InjectModel } from '@nestjs/mongoose';
+import { MailService } from 'src/email/mail.service';
 
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>
+    @InjectModel(User.name) private userModel: Model<User>,
+    private readonly mailService: MailService,
   ){}
   async create(password: string, createUserDto: CreateUserDto) {
     const hashPassword = await bcrypt.hash(password, 10);
@@ -18,6 +20,7 @@ export class UsersService {
       ...createUserDto,
       password: hashPassword
     });
+    await this.mailService.sendSignupConfirmation(newUser.email, newUser.fullName);
     return newUser.save()
   }
 
