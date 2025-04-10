@@ -20,7 +20,7 @@ export class UsersService {
       ...createUserDto,
       password: hashPassword
     });
-    await this.mailService.sendSignupConfirmation(newUser.email, newUser.fullName);
+    await this.mailService.sendSignupConfirmation(newUser.email, newUser.username);
     return newUser.save()
   }
 

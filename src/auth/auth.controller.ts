@@ -1,10 +1,10 @@
-import { Controller, Post, Body, Res, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpCode, Param } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
   @HttpCode(200)
@@ -13,15 +13,33 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     const user = await this.authService.validateUser(body.email, body.password);
-    const token = await this.authService.login(user);
+    // const token = await this.authService.login(user);
+    const token = await this.authService.generateToken(user)
+    console.log("My token details", token);
 
+    // res.cookie('jwt', token.access_token, {
+    //   httpOnly: true, // prevents JS access
+    //   secure: process.env.NODE_ENV === 'production', // send only over HTTPS
+    //   sameSite: 'strict',
+    //   maxAge: 1000 * 60 * 60, // 1 hour
+    // });
+
+    return user;
+  }
+
+  @Post('verify-login/:userId')
+  async verifyLogin(
+    @Body() otp: string,
+    @Param('userId') userId: string,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const result = await this.authService.verifyLoginToken(otp, userId)
+    const token = await this.authService.login(userId);
     res.cookie('jwt', token.access_token, {
       httpOnly: true, // prevents JS access
       secure: process.env.NODE_ENV === 'production', // send only over HTTPS
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60, // 1 hour
     });
-
-    return user;
   }
 }

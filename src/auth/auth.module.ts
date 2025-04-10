@@ -6,9 +6,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from './jwt.strategy';
+import { TokenModule } from 'src/token/token.module';
 
 @Module({
   imports: [
+    TokenModule,
     UsersModule, 
     PassportModule,
     JwtModule.register({

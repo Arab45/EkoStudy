@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './email/mail.module';
+import { TokenModule } from './token/token.module';
 @Module({
   imports: [
     ConfigModule.forRoot(
@@ -19,6 +20,7 @@ import { MailModule } from './email/mail.module';
     AdminsModule,
     AuthModule,
     MailModule,
+    TokenModule
   ],
 })
 export class AppModule { }
