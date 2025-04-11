@@ -7,6 +7,7 @@ import { Token } from 'src/schema/token.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { User } from 'src/schema/User.schema';
+import { MailService } from 'src/email/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private tokenService: TokenService,
+    private mailService: MailService,
     @InjectModel(Token.name) private tokenModel: Model<Token>,
      @InjectModel(User.name) private userModel: Model<User>,
   ) { }
@@ -30,7 +32,7 @@ export class AuthService {
 
 
   async generateToken(user: any) {
-    const token = await this.tokenService.generateToken(4);
+    const token = await this.tokenService.generateToken(6);
     const hashToken = await bcrypt.hash(token, 10);
 
     console.log('my token =', token);
@@ -45,6 +47,8 @@ export class AuthService {
       owner: user._id,
       token: hashToken
     })
+
+    await this.mailService.sendOtp(user.email, user.username, token)
 
     await newToken.save();
     return newToken;
@@ -74,5 +78,9 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async logout(res){
+    return res.status(200).json({ message: "logout successful!"})
   }
 }

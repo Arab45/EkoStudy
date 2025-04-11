@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res, HttpCode, Param } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpCode, Param, Get } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 
@@ -16,14 +16,6 @@ export class AuthController {
     // const token = await this.authService.login(user);
     const token = await this.authService.generateToken(user)
     console.log("My token details", token);
-
-    // res.cookie('jwt', token.access_token, {
-    //   httpOnly: true, // prevents JS access
-    //   secure: process.env.NODE_ENV === 'production', // send only over HTTPS
-    //   sameSite: 'strict',
-    //   maxAge: 1000 * 60 * 60, // 1 hour
-    // });
-
     return user;
   }
 
@@ -38,8 +30,19 @@ export class AuthController {
     res.cookie('jwt', token.access_token, {
       httpOnly: true, // prevents JS access
       secure: process.env.NODE_ENV === 'production', // send only over HTTPS
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 60, // 1 hour
     });
+  }
+
+  @Get('logout')
+  async logout (@Res() res: Response){
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: true,        // true if using HTTPS
+      sameSite: 'lax',  // adjust if needed
+    })
+
+    return await this.authService.logout(res)
   }
 }

@@ -6,21 +6,21 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
 
-  async sendSignupConfirmation(to: string, name: string) {
+  async sendSignupConfirmation(to: string, username: string) {
     await this.mailerService.sendMail({
       to,
-      subject: 'Welcome to MyApp!',
+      subject: 'Welcome to ziPay!',
       template: './signup',
-      context: { name },
+      context: { username },
     });
   }
 
-  async sendOtp(to: string, otp: string) {
+  async sendOtp(to: string, username: string, token: string) {
     await this.mailerService.sendMail({
       to,
       subject: 'Your One-Time Password (OTP)',
-      template: 'otp',
-      context: { otp },
+      template: './verificationEmailToken',
+      context: { username, token },
     });
   }
 

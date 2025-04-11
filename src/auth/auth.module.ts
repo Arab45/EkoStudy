@@ -7,12 +7,14 @@ import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from './jwt.strategy';
 import { TokenModule } from 'src/token/token.module';
+import { MailModule } from 'src/email/mail.module';
 
 @Module({
   imports: [
     TokenModule,
     UsersModule, 
     PassportModule,
+    MailModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'secretKey',
       signOptions: { expiresIn: '1h' },
