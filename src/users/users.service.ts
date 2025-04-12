@@ -50,4 +50,13 @@ export class UsersService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
+
+  async updatePassword(userId: string, newHashedPassword: string): Promise<void> {
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new UnauthorizedException('User not found');
+  
+    user.password = newHashedPassword;
+    await user.save();
+  }
+  
 }

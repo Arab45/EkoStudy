@@ -84,12 +84,34 @@ export class AuthService {
     return res.status(200).json({ message: "logout successful!"})
   }
 
-  async forgetPassword ({email: string, req}){
-    const { email } = req.body;
+  async forgetPassword (email: string){
 
     const user = await this.userModel.findOne({email})
     if(!user){
       throw new UnauthorizedException("No user data detected, signup instead");
+    }
+
+    const payload = { sub: user._id };
+    const token = this.jwtService.sign(payload, {
+      secret: process.env.RESET_PASSWORD_SECRET,
+      expiresIn: '15m',
+    });
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    await this.mailService.sendForgotPassword(user.email, resetLink);
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.RESET_PASSWORD_SECRET,
+      });
+
+      const userId = payload.sub;
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+      await this.usersService.updatePassword(userId, hashedPassword);
+    } catch (err) {
+      throw new UnauthorizedException('Invalid or expired reset token');
     }
   }
 }
