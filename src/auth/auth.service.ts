@@ -83,4 +83,13 @@ export class AuthService {
   async logout(res){
     return res.status(200).json({ message: "logout successful!"})
   }
+
+  async forgetPassword ({email: string, req}){
+    const { email } = req.body;
+
+    const user = await this.userModel.findOne({email})
+    if(!user){
+      throw new UnauthorizedException("No user data detected, signup instead");
+    }
+  }
 }
