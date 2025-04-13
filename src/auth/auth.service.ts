@@ -98,7 +98,8 @@ export class AuthService {
     });
 
     const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-    await this.mailService.sendForgotPassword(user.email, resetLink);
+    console.log(resetLink)
+    await this.mailService.sendForgotPassword(user.email, user.username, resetLink);
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
@@ -108,8 +109,11 @@ export class AuthService {
       });
 
       const userId = payload.sub;
+      const user = await this.userModel.findById(userId);
+      if(!user)  throw new UnauthorizedException;
       const hashedPassword = await bcrypt.hash(newPassword, 12);
       await this.usersService.updatePassword(userId, hashedPassword);
+      await this.mailService.sendResetPassword(user.email, user.username)
     } catch (err) {
       throw new UnauthorizedException('Invalid or expired reset token');
     }

@@ -54,7 +54,7 @@ export class UsersService {
   async updatePassword(userId: string, newHashedPassword: string): Promise<void> {
     const user = await this.userModel.findById(userId);
     if (!user) throw new UnauthorizedException('User not found');
-  
+    user.forgetPassword = '',
     user.password = newHashedPassword;
     await user.save();
   }

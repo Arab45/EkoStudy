@@ -15,6 +15,11 @@ export class UpdateUserDto {
     email?: string
 
     @IsString()
+    @IsEmail()
+    @IsOptional()
+    forgetPassword?: string
+
+    @IsString()
     @MinLength(8)
     @IsOptional()
     @Matches(/^[A-Za-z0-9]+$/)

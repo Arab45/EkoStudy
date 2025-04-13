@@ -14,8 +14,6 @@ export class  User extends Document {
     password: string
     @Prop({  })
     forgetPassword: string
-    @Prop({  })
-    resetPassword: string
 }
 
 export const userSchema = SchemaFactory.createForClass(User)

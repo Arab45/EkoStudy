@@ -46,7 +46,7 @@ export class AuthController {
     return await this.authService.logout(res)
   }
 
-  @Post('forgot-password')
+@Post('forgot-password')
 async forgotPassword(@Body('email') email: string) {
   await this.authService.forgetPassword(email);
   return { message: 'If that email exists, a reset link has been sent.' };

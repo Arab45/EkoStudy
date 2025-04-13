@@ -24,12 +24,21 @@ export class MailService {
     });
   }
 
-  async sendForgotPassword(to: string, resetLink: string) {
+  async sendForgotPassword(to: string, username: string, resetLink: string) {
     await this.mailerService.sendMail({
       to,
       subject: 'Reset Your Password',
-      template: 'forgot-password',
-      context: { resetLink },
+      template: './forgotPassTemp',
+      context: { username, resetLink },
+    });
+  }
+
+  async sendResetPassword(to: string, username: string) {
+    await this.mailerService.sendMail({
+      to,
+      subject: 'Successfully reset Password',
+      template: './resetPassTemp',
+      context: { username },
     });
   }
 }
