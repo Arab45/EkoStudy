@@ -13,7 +13,7 @@ import { TokenModule } from './token/token.module';
         isGlobal: true,
       }
     ), //Load environment variable
-    MongooseModule.forRoot(process.env.MONGO_URI || "mongodb://localhost:27017CRUD"),
+    MongooseModule.forRoot(process.env.MONGO_URI as string),
     UsersModule,
     AdminsModule,
     AuthModule,
