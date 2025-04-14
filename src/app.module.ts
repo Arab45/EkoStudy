@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { NinjaModule } from './ninja/ninja.module';
 import { UsersModule } from './users/users.module';
 import { AdminsModule } from './admins/admin.module';
 import { AuthModule } from './auth/auth.module';
@@ -14,8 +13,7 @@ import { TokenModule } from './token/token.module';
         isGlobal: true,
       }
     ), //Load environment variable
-    MongooseModule.forRoot(process.env.MONGO_URI || "mongodb://localhost:27017"),
-    NinjaModule,
+    MongooseModule.forRoot(process.env.MONGO_URI || "mongodb://localhost:27017CRUD"),
     UsersModule,
     AdminsModule,
     AuthModule,
