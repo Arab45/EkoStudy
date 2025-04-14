@@ -12,7 +12,7 @@ export class MailService {
       subject: 'Welcome to ziPay!',
       template: './signup',
       context: { username },
-    });
+    })
   }
 
   async sendOtp(to: string, username: string, token: string) {
