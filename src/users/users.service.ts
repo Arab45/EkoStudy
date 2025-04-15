@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import * as bcrypt from "bcryptjs"
@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { User } from 'src/schema/User.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { MailService } from 'src/email/mail.service';
+import { v2 as CloudinaryType } from 'cloudinary';
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private readonly mailService: MailService,
+    @Inject('CLOUDINARY') private cloudinary: typeof CloudinaryType,
   ){}
   async create(password: string, createUserDto: CreateUserDto) {
    
@@ -57,6 +59,10 @@ export class UsersService {
     user.forgetPassword = '',
     user.password = newHashedPassword;
     await user.save();
+  }
+
+  async updateProfile (){
+
   }
   
 }

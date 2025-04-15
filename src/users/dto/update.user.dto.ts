@@ -20,6 +20,16 @@ export class UpdateUserDto {
     forgetPassword?: string
 
     @IsString()
+    @IsEmail()
+    @IsOptional()
+    profileImg?: string
+
+    @IsString()
+    @IsEmail()
+    @IsOptional()
+    profileImgId?: string
+
+    @IsString()
     @MinLength(8)
     @IsOptional()
     @Matches(/^[A-Za-z0-9]+$/)

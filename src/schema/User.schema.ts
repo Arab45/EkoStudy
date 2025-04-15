@@ -14,6 +14,10 @@ export class  User extends Document {
     password: string
     @Prop({  })
     forgetPassword: string
+    @Prop({  })
+    profileImg: string
+    @Prop({  })
+    profileImgId: string
 }
 
 export const userSchema = SchemaFactory.createForClass(User)
