@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './email/mail.module';
 import { TokenModule } from './token/token.module';
+import { NotificationModule } from './notification/notification.module';
 @Module({
   imports: [
     ConfigModule.forRoot(
@@ -18,7 +19,8 @@ import { TokenModule } from './token/token.module';
     AdminsModule,
     AuthModule,
     MailModule,
-    TokenModule
+    TokenModule,
+    NotificationModule
   ],
 })
 export class AppModule { }

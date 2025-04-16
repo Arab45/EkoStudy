@@ -9,7 +9,6 @@ export class CreateNotificationDto {
     @IsOptional()
     message: string;
 
-    @IsString()
     @IsOptional()
     read: boolean;
 }

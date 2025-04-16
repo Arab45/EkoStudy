@@ -9,7 +9,6 @@ export class UpdateNotificationDto {
     @IsOptional()
     message?: string;
 
-    @IsString()
     @IsOptional()
     read?: boolean;
 }

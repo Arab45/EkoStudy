@@ -25,10 +25,11 @@ export class NotificationService {
     }
 
     async updateNotification(id: string, updateNotificationDto: UpdateNotificationDto){
-        return this.noticationModel.findByIdAndUpdate(id, updateNotificationDto);
+        return this.noticationModel.findByIdAndUpdate(id, updateNotificationDto, { new: true});
     }
 
     async deleteNotification(id: string){
-        return this.noticationModel.findByIdAndDelete(id)
+        await this.noticationModel.findByIdAndDelete(id);
+        return { message: "Notification deleted successfully"}
     }
 }
