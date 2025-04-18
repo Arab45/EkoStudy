@@ -7,8 +7,13 @@ import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './email/mail.module';
 import { TokenModule } from './token/token.module';
 import { NotificationModule } from './notification/notification.module';
+import { MulterModule } from '@nestjs/platform-express';
+import * as multer from 'multer';
 @Module({
   imports: [
+    MulterModule.register({
+      storage: multer.memoryStorage(), // use in-memory buffer
+    }),
     ConfigModule.forRoot(
       {
         isGlobal: true,

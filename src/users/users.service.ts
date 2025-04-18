@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { User } from 'src/schema/User.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { MailService } from 'src/email/mail.service';
-import { v2 as CloudinaryType } from 'cloudinary';
+// import { v2 as CloudinaryType } from 'cloudinary';
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private readonly mailService: MailService,
-    @Inject('CLOUDINARY') private cloudinary: typeof CloudinaryType,
+    // @Inject('CLOUDINARY') private cloudinary: typeof CloudinaryType,
   ){}
   async create(password: string, createUserDto: CreateUserDto) {
    
@@ -45,7 +45,11 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  async findById(id: string) {
+    return this.userModel.findById(id);
+  }
+
+  update(id: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
