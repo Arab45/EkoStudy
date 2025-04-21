@@ -35,37 +35,15 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // @UseInterceptors(FileInterceptor('profileImg'))
-  // async update(
-  //   @Param('id') id: string, 
-  //   @Body() updateUserDto: UpdateUserDto,
-  //   @UploadedFile() file: Express.Multer.File
-  // ) {
-  //   const user = await this.usersService.findById(id);
-  //   if (!user) throw new NotFoundException('User not found');
-
-  //   if (user.profileImgId) {
-  //     await this.cloudinaryService.deleteImage(user.profileImgId);
-  //   }
-
-  //   const uploaded = await this.cloudinaryService.uploadImage(file, `users/${id}`);
-
-  //   const updatedUser = await this.usersService.update(id, {
-  //     profileImg: uploaded.secure_url,
-  //     profileImgId: uploaded.public_id,
-  //   });
-
-  //   console.log(updatedUser);
-
-  //   return {
-  //     message: 'Profile image updated successfully',
-  //     data: {
-  //       // profileImg: updatedUser.profileImg,
-  //     },
-  //   };
-  //   // return this.usersService.update(+id, updateUserDto);
-  // }
+  @Patch(':id/profile')
+  @UseInterceptors(FileInterceptor('profileImg'))
+  async updateProfile(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.usersService.update(id, updateUserDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

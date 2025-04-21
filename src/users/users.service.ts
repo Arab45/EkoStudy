@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import * as bcrypt from "bcryptjs"
@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { User } from 'src/schema/User.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { MailService } from 'src/email/mail.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 // import { v2 as CloudinaryType } from 'cloudinary';
 
 
@@ -14,7 +15,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private readonly mailService: MailService,
-    // @Inject('CLOUDINARY') private cloudinary: typeof CloudinaryType,
+    private cloudinaryService: CloudinaryService
   ){}
   async create(password: string, createUserDto: CreateUserDto) {
    
@@ -49,8 +50,27 @@ export class UsersService {
     return this.userModel.findById(id);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto, file?: Express.Multer.File) {
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (file) {
+      user.profileImg = await this.cloudinaryService.uploadImage(file);
+    }
+
+    console.log(user);
+
+    if (updateUserDto.profileImg) {
+      user.profileImg = updateUserDto.profileImg;
+    }
+
+    if (updateUserDto.profileImgId) {
+      user.profileImgId = updateUserDto.profileImgId;
+    }
+
+    return user.save();
   }
 
   remove(id: number) {
