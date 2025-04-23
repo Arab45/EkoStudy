@@ -1,16 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, UseGuards, Request, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-// import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from 'src/common/multer.config';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    // private readonly cloudinaryService: CloudinaryService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   @Post('createUser')
@@ -35,15 +36,25 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id/profile')
-  @UseInterceptors(FileInterceptor('profileImg'))
+  @Put(':id')
+  @UseInterceptors(FileInterceptor('profileImg', multerConfig))
   async updateProfile(
     @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
     @UploadedFile() file: Express.Multer.File,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(id, updateUserDto);
+    const updatedData: any = { ...updateUserDto };
+
+    if (file) {
+      const imageUrl = await this.cloudinaryService.uploadImage(file);
+      updatedData.profileImg = imageUrl.url;
+      updatedData.profileImgId = imageUrl.public_id
+    };
+    
+    return this.usersService.update(id, updatedData);
+    
   }
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {

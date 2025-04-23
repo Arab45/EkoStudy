@@ -50,27 +50,9 @@ export class UsersService {
     return this.userModel.findById(id);
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto, file?: Express.Multer.File) {
-    const user = await this.userModel.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    if (file) {
-      user.profileImg = await this.cloudinaryService.uploadImage(file);
-    }
-
-    console.log(user);
-
-    if (updateUserDto.profileImg) {
-      user.profileImg = updateUserDto.profileImg;
-    }
-
-    if (updateUserDto.profileImgId) {
-      user.profileImgId = updateUserDto.profileImgId;
-    }
-
-    return user.save();
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, {new: true});
+    return user;
   }
 
   remove(id: number) {
