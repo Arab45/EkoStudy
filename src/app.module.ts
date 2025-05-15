@@ -9,6 +9,7 @@ import { TokenModule } from './token/token.module';
 import { NotificationModule } from './notification/notification.module';
 import { MulterModule } from '@nestjs/platform-express';
 import * as multer from 'multer';
+import { CourseModule } from './course/course.module';
 @Module({
   imports: [
     MulterModule.register({
@@ -25,7 +26,8 @@ import * as multer from 'multer';
     AuthModule,
     MailModule,
     TokenModule,
-    NotificationModule
+    NotificationModule,
+    CourseModule
   ],
 })
 export class AppModule { }
